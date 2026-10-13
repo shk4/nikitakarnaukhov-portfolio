@@ -47,6 +47,11 @@ for (const item of JSON.parse(readFileSync(join(root, 'media-source/manifest.jso
   assert.equal(hash, item.sha256, 'Media mismatch: ' + relative);
 }
 const personalization = readFileSync(join(output, 'cases/email-personalization.html'), 'utf8');
-assert(personalization.includes('email-personalization-monitor-figma-'), 'Latest cover is missing');
+for (const slug of ['email-builder-settings', 'email-personalization', 'image-gallery', 'campaigns-redesign', 'design-system']) {
+  const html = readFileSync(join(output, 'cases/' + slug + '.html'), 'utf8');
+  assert(html.includes('real-cover--' + slug), 'Real-layout cover missing: ' + slug);
+  assert(html.includes('real-cover__detail'), 'Enlarged detail missing: ' + slug);
+}
+assert(personalization.includes('/media/figma-shots/shot-03.webp'), 'Personalization detail is missing');
 assert(personalization.includes('data-reading-mode="detailed"'), 'Detailed view must be the default');
 console.log(`OK: ${manifest.routes.length} routes; local images, fonts, navigation payloads and restored media verified.`);

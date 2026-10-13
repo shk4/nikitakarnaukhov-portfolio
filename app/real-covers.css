@@ -1,0 +1,45 @@
+/* One complete composition at every size; no separate thumbnail crop. */
+.real-cover{position:relative;isolation:isolate;aspect-ratio:16/9;background:#1c2422;--detail-motion:translate(-1.5%,-2%) scale(1.025);}
+.generated-project-cover .real-cover{height:auto;width:100%;}
+.studio-project-media:has(.real-cover),.remaining-cover:has(.real-cover){aspect-ratio:16/9;height:auto;padding:0;}
+.project-cover:has(>.real-cover){height:auto;width:100%;aspect-ratio:16/9;}
+.real-cover__layer{position:absolute;overflow:hidden;border-radius:clamp(3px,.65vw,14px);transform-origin:center;transition:transform 650ms cubic-bezier(.2,.75,.25,1);}
+.real-cover__screen{z-index:1;box-shadow:0 10px 36px #0003;}
+.real-cover__detail{z-index:2;box-shadow:0 12px 35px #0005,0 1px 3px #0003;}
+.real-cover__layer>img{position:absolute;display:block;height:auto;max-width:none;pointer-events:none;user-select:none;}
+.real-cover--email-personalization{--detail-motion:translate(-.5%,-2.5%) scale(1.035);}
+.real-cover--image-gallery{--detail-motion:translate(-1%,-3%) scale(1.02);}
+.real-cover--campaigns-redesign{--detail-motion:translate(0,-1.8%) scale(1.015);}
+.real-cover--design-system{--detail-motion:translate(-1%,-1%) scale(1.04);}
+@media(hover:hover) and (pointer:fine){
+ a:hover .real-cover__screen,.real-cover:hover .real-cover__screen{transform:translateY(-.4%) scale(1.012);}
+ a:hover .real-cover__detail,.real-cover:hover .real-cover__detail{transform:var(--detail-motion);}
+}
+a:focus-visible .real-cover__screen,.real-cover:focus-visible .real-cover__screen{transform:translateY(-.4%) scale(1.012);}
+a:focus-visible .real-cover__detail,.real-cover:focus-visible .real-cover__detail{transform:var(--detail-motion);}
+@media(prefers-reduced-motion:reduce){
+ .real-cover .real-cover__layer{transition:none;transform:none!important;}
+}
+
+/* Keep light legacy cover backgrounds out of antialiased rounded edges. */
+.project-cover.generated-project-cover{background:#1c2422;}
+.studio-project-media:has(.real-cover),
+.study-home .hierarchy-project .studio-project-media:has(.real-cover),
+.remaining-cover:has(.real-cover),
+.visual-case-cover:has(.real-cover){
+ background:#1c2422;
+ clip-path:inset(0 round 15px);
+}
+.studio-project-media:has(.real-cover)::after,
+.remaining-cover:has(.real-cover)::after{display:none;}
+.real-cover__layer>img{border-radius:0;box-shadow:none;}
+
+.real-cover--image-gallery .real-cover__detail{background:#fff;}
+
+.gallery-preview-card{left:61.45833%;top:33.7963%;width:31.25%;container-type:inline-size;background:#fff;color:#68777f;line-height:1.35;}
+.gallery-preview-card__body{padding:5.33333cqw;}
+.gallery-preview-card__image{position:relative;aspect-ratio:153/115;overflow:hidden;border-radius:2cqw;}
+.gallery-preview-card__image>img{display:block;width:100%;height:auto;border-radius:0;box-shadow:none;}
+.gallery-preview-card p{margin:4cqw 0 0;font-family:Arial,sans-serif;font-size:5.5cqw;line-height:1.35;font-weight:400;letter-spacing:0;}
+
+.real-cover--email-builder-settings .real-cover__detail{background:#fff;}

@@ -4,9 +4,10 @@ import { useEffect, useRef } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { resetPageScroll } from "./scroll-position";
 
-// A short, visible transition; route fetching still starts immediately.
-const MIN_TRANSITION_MS = 550;
-const EXIT_DURATION_MS = 160;
+// Fast routes never show the overlay; slower ones reveal as soon as committed.
+const SHOW_LOADER_AFTER_MS = 140;
+const EXIT_DURATION_MS = 100;
+const FIRST_CASE_TRANSITION_MS = 550;
 
 const titles: Record<string,string> = {
   "/": "Избранные проекты",
@@ -31,14 +32,19 @@ export function PageTransition() {
   const pending = useRef<string | null>(null);
   const fallback = useRef<ReturnType<typeof setTimeout> | null>(null);
   const departure = useRef<Animation | null>(null);
-  const startedAt = useRef(0);
+  const prefetched = useRef(new Set<string>());
+  const visitedCases = useRef(new Set<string>());
+  const revealNotBefore = useRef(0);
   const revealTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const reduced = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   useEffect(() => {
     if (!pending.current || pathname !== new URL(pending.current, location.href).pathname) return;
+    if (pathname.includes("/cases/")) visitedCases.current.add(pathname);
     const openAtTop = !new URL(pending.current, location.href).hash;
     pending.current = null;
+    if (revealTimer.current) clearTimeout(revealTimer.current);
+    revealTimer.current = null;
     if (fallback.current) clearTimeout(fallback.current);
     fallback.current = null;
     departure.current?.cancel();
@@ -49,6 +55,7 @@ export function PageTransition() {
       scrollFrame = requestAnimationFrame(() => { resetPageScroll(); });
     }
     const panel = loader.current!;
+    if (panel.style.visibility !== "visible") return () => cancelAnimationFrame(scrollFrame);
     const main = document.querySelector("main");
     const revealPage = () => {
       revealTimer.current = null;
@@ -57,13 +64,13 @@ export function PageTransition() {
       panel.dataset.state="ready";
       panel.style.pointerEvents="none";
       const reveal = panel.animate([{opacity},{opacity:0}], {duration:EXIT_DURATION_MS,easing:"ease-out",fill:"forwards"});
-      main?.animate([{opacity:.85,transform:"translateY(10px)"},{opacity:1,transform:"translateY(0)"}],{duration:240,easing:"cubic-bezier(.22,1,.36,1)",fill:"backwards"});
+      main?.animate([{opacity:.95},{opacity:1}],{duration:150,easing:"cubic-bezier(.22,1,.36,1)",fill:"backwards"});
       reveal.finished.then(() => {panel.style.visibility="hidden"; panel.style.pointerEvents="none"; reveal.cancel();}).catch(()=>{});
     };
-    const remaining = Math.max(0, MIN_TRANSITION_MS - EXIT_DURATION_MS - (performance.now() - startedAt.current));
+    const remaining = Math.max(0, revealNotBefore.current - performance.now());
     if (remaining) revealTimer.current = setTimeout(revealPage, remaining);
     else revealPage();
-    return () => cancelAnimationFrame(scrollFrame);
+    return () => {cancelAnimationFrame(scrollFrame);if(revealTimer.current)clearTimeout(revealTimer.current);};
   }, [pathname]);
 
   useEffect(() => {
@@ -75,7 +82,13 @@ export function PageTransition() {
       if (url.origin !== location.origin || !(url.pathname in titles) || url.pathname === location.pathname) return;
       return url;
     }
-    const prefetch = (event: Event) => {const url=internalLink(event);if(url) router.prefetch(url.pathname);};
+    const prefetchUrl = (url: URL) => {
+      const href = url.pathname + url.search;
+      if (prefetched.current.has(href)) return;
+      prefetched.current.add(href);
+      router.prefetch(href);
+    };
+    const prefetch = (event: Event) => {const url=internalLink(event);if(url) prefetchUrl(url);};
     const navigate = (event: MouseEvent) => {
       if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.altKey || event.shiftKey || reduced()) return;
       const url = internalLink(event);
@@ -83,18 +96,26 @@ export function PageTransition() {
       event.preventDefault();
       if (pending.current) return;
       pending.current = url.href;
+      const firstCaseVisit = url.pathname.includes("/cases/") && !visitedCases.current.has(url.pathname);
+      revealNotBefore.current = firstCaseVisit ? performance.now() + FIRST_CASE_TRANSITION_MS - EXIT_DURATION_MS : 0;
       if (revealTimer.current) clearTimeout(revealTimer.current);
       revealTimer.current = null;
-      startedAt.current = performance.now();
       const panel=loader.current!;
       const link = event.target instanceof Element ? event.target.closest<HTMLAnchorElement>("a[href]") : null;
       title.current!.textContent=link?.dataset.transitionTitle || titles[url.pathname];
       caption.current!.textContent=link?.dataset.transitionCaption || "Портфолио / Выбранный проект";
+      panel.getAnimations().forEach(a=>a.cancel());
+      panel.style.visibility="hidden";
+      const showLoader = () => {
+      revealTimer.current = null;
       panel.dataset.state="loading";
       panel.style.visibility="visible";panel.style.pointerEvents="auto";
       panel.getAnimations().forEach(a=>a.cancel());
       panel.animate([{opacity:0},{opacity:1}],{duration:130,easing:"ease-out",fill:"forwards"});
       departure.current=document.querySelector("main")?.animate([{opacity:1},{opacity:.15}],{duration:160,easing:"ease-out",fill:"forwards"}) || null;
+      };
+      if (firstCaseVisit) showLoader();
+      else revealTimer.current = setTimeout(showLoader, SHOW_LOADER_AFTER_MS);
       fallback.current=setTimeout(()=>location.assign(url.href),6000);
       // Fetch and navigation start on the click, without waiting for the animation.
       router.push(url.pathname+url.search+url.hash, { scroll: Boolean(url.hash) });
@@ -102,9 +123,36 @@ export function PageTransition() {
     const restore = () => {pending.current=null;if(fallback.current)clearTimeout(fallback.current);fallback.current=null;if(revealTimer.current)clearTimeout(revealTimer.current);revealTimer.current=null;departure.current?.cancel();const panel=loader.current;if(panel){panel.getAnimations().forEach(a=>a.cancel());panel.style.visibility="hidden";panel.style.pointerEvents="none";}};
     document.addEventListener("click",navigate);
     document.addEventListener("pointerover",prefetch,{passive:true});
+    document.addEventListener("focusin",prefetch);
+    document.addEventListener("pointerdown",prefetch,{passive:true});
     window.addEventListener("pageshow",restore);
-    return () => {document.removeEventListener("click",navigate);document.removeEventListener("pointerover",prefetch);window.removeEventListener("pageshow",restore);if(fallback.current) clearTimeout(fallback.current);if(revealTimer.current)clearTimeout(revealTimer.current);};
+    return () => {document.removeEventListener("click",navigate);document.removeEventListener("pointerover",prefetch);document.removeEventListener("focusin",prefetch);document.removeEventListener("pointerdown",prefetch);window.removeEventListener("pageshow",restore);if(fallback.current) clearTimeout(fallback.current);if(revealTimer.current)clearTimeout(revealTimer.current);};
   }, [router]);
+
+
+  useEffect(() => {
+    const connection = (navigator as Navigator & {connection?: {saveData?: boolean; effectiveType?: string}}).connection;
+    if (connection?.saveData || /(^|-)2g$/.test(connection?.effectiveType || '') || !('IntersectionObserver' in window)) return;
+    const observer = new IntersectionObserver(entries => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        const link = entry.target as HTMLAnchorElement;
+        observer.unobserve(link);
+        const url = new URL(link.href, location.href);
+        const href = url.pathname + url.search;
+        if (prefetched.current.has(href)) continue;
+        prefetched.current.add(href);
+        router.prefetch(href);
+      }
+    }, {rootMargin:'120px'});
+    const timer = setTimeout(() => {
+      document.querySelectorAll<HTMLAnchorElement>('a[href]').forEach(link => {
+        const url = new URL(link.href, location.href);
+        if (url.origin === location.origin && url.pathname in titles && url.pathname !== pathname && !link.hasAttribute('download')) observer.observe(link);
+      });
+    }, 300);
+    return () => {clearTimeout(timer);observer.disconnect();};
+  }, [pathname, router]);
 
   return <div ref={loader} className={`retro-loader${(!pathname.startsWith('/studies/') || /^\/studies\/(07|10|11)(?:\/|$)/.test(pathname)) ? ' type-system' : ''}`} aria-hidden="true"><div className="retro-loader__screen"><div ref={caption} className="retro-loader__caption">Портфолио / Выбранный проект</div><div className="retro-loader__title"><span ref={title}/></div><div className="retro-loader__bar"><div className="retro-loader__bar-fill"/></div><div className="retro-loader__status"><span className="retro-loader__loading">Открываю проект<span className="retro-loader__caret">_</span></span><span className="retro-loader__ready">Готово</span><span>↵</span></div></div></div>;
 }

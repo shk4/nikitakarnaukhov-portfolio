@@ -19,6 +19,7 @@ import "./type-system.css";
 import "./case-reader.css";
 import "./visual-case.css";
 import "./motion-case.css";
+import "./real-covers.css";
 
 export const viewport: Viewport = {
   width: "device-width",

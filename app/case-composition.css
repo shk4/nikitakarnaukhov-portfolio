@@ -42,7 +42,7 @@
 .outcome-grid--2{grid-template-columns:repeat(2,minmax(0,1fr));}
 .outcome-grid--4,.outcome-grid--5{grid-template-columns:repeat(2,minmax(0,1fr));}
 .case-note{min-width:0;color:var(--ink);}
-.case-note--result{padding:24px 0 28px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:25px;}
+.case-note--result{padding:24px 0 28px;border-top:0;display:flex;flex-direction:column;gap:25px;}
 .case-note__mark{font-family:inherit;font-size:clamp(42px,4.5vw,72px);font-weight:450;letter-spacing:-.065em;line-height:1;color:var(--accent);}
 
 .case-note__title{font-size:clamp(21px,2vw,29px);font-weight:500;line-height:1.25;letter-spacing:-.04em;margin:0 0 16px;}

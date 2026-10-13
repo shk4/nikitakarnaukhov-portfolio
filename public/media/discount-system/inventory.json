@@ -1,0 +1,112 @@
+[
+  {
+    "group": "Продукт",
+    "discount": "Скидка на рекомендованный продукт",
+    "context": "Рекомендации и сегменты",
+    "source_nodes": [
+      "209:224542"
+    ],
+    "illustrative_expression": "${oldPrice - currentPrice}"
+  },
+  {
+    "group": "Заказ",
+    "discount": "Скидка за единицу от старой цены",
+    "context": "Сравнение со старой ценой",
+    "source_nodes": [
+      "209:224239"
+    ],
+    "illustrative_expression": "${oldPrice - currentPrice}"
+  },
+  {
+    "group": "Продукт",
+    "discount": "Скидка на продукт в сессии",
+    "context": "Добавлен в список за сессию",
+    "source_nodes": [
+      "209:224170"
+    ],
+    "illustrative_expression": "${oldPrice - currentPrice}"
+  },
+  {
+    "group": "Продукт",
+    "discount": "Скидка от цены при просмотре",
+    "context": "Просмотр продукта",
+    "source_nodes": [
+      "209:224216"
+    ],
+    "illustrative_expression": "${viewPrice - currentPrice}"
+  },
+  {
+    "group": "Продукт",
+    "discount": "Скидка от старой цены",
+    "context": "Просмотр продукта",
+    "source_nodes": [
+      "209:224262"
+    ],
+    "illustrative_expression": "${oldPrice - currentPrice}"
+  },
+  {
+    "group": "Список продуктов",
+    "discount": "Скидка от цены в списке",
+    "context": "На единицу продукта",
+    "source_nodes": [
+      "209:224086",
+      "209:224193"
+    ],
+    "illustrative_expression": "${listPrice - currentPrice}"
+  },
+  {
+    "group": "Список продуктов",
+    "discount": "Скидка от старой цены",
+    "context": "На единицу продукта",
+    "source_nodes": [
+      "209:224107",
+      "209:224285"
+    ],
+    "illustrative_expression": "${oldPrice - currentPrice}"
+  },
+  {
+    "group": "Список продуктов",
+    "discount": "Скидка от суммы в списке",
+    "context": "На всю позицию",
+    "source_nodes": [
+      "209:224149"
+    ],
+    "illustrative_expression": "${listTotal - currentTotal}"
+  },
+  {
+    "group": "Список продуктов",
+    "discount": "Скидка от суммы по старым ценам",
+    "context": "На всю позицию",
+    "source_nodes": [
+      "209:224128"
+    ],
+    "illustrative_expression": "${oldTotal - currentTotal}"
+  },
+  {
+    "group": "Заказ",
+    "discount": "Скидка на единицу продукта",
+    "context": "Одна единица товара в заказе",
+    "source_nodes": [
+      "209:224348"
+    ],
+    "illustrative_expression": "${itemDiscount / quantity}"
+  },
+  {
+    "group": "Заказ",
+    "discount": "Скидка на позицию",
+    "context": "Всё количество товара в позиции",
+    "source_nodes": [
+      "209:224369"
+    ],
+    "illustrative_expression": "${itemBaseTotal - itemTotal}"
+  },
+  {
+    "group": "Заказ",
+    "discount": "Скидка на заказ",
+    "context": "Общая скидка по заказу",
+    "source_nodes": [
+      "209:224327"
+    ],
+    "illustrative_expression": "${orderBaseTotal - orderTotal}"
+  }
+]

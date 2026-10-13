@@ -1,0 +1,71 @@
+/* Study 10: shared typography roles. No color or layout overrides. */
+.type-system {
+  --type-family:"Onest Variable",Onest,-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+  --type-display:600 clamp(4.5rem,12vw,11.25rem)/1 var(--type-family);
+  --type-section:500 clamp(2.25rem,5.25vw,4.875rem)/1.1 var(--type-family);
+  --type-page:500 clamp(2.25rem,4.2vw,4rem)/1.1 var(--type-family);
+  --type-statement:400 clamp(1.5rem,2.4vw,2.25rem)/1.2 var(--type-family);
+  --type-heading:500 clamp(1.625rem,2.4vw,2.25rem)/1.2 var(--type-family);
+  --type-title:500 1.5rem/1.3 var(--type-family);
+  --type-lead:400 1.25rem/1.5 var(--type-family);
+  --type-body:400 1.125rem/1.6 var(--type-family);
+  --type-compact:400 1rem/1.6 var(--type-family);
+  --type-small:400 .875rem/1.5 var(--type-family);
+  --type-action:500 .875rem/1.5 var(--type-family);
+  --type-label:500 .75rem/1.5 var(--type-family);
+  font-family:var(--type-family);
+}
+.type-system :is(.hierarchy-hero h1,.about-number>span) {font:var(--type-display)!important;letter-spacing:-.065em!important;}
+.type-system :is(.hierarchy-work-heading h2,.studio-section-heading h2,.remaining-heading h2,.case-chapter--intro .notion-heading) {font:var(--type-section)!important;letter-spacing:-.05em!important;}
+.type-system :is(.case-intro h1,.case-note--result>.case-note__mark,.case-chapter--results .case-chapter-heading .notion-heading,.footer-cta) {font:var(--type-page)!important;letter-spacing:-.05em!important;}
+.type-system .scroll-statement {font:var(--type-statement)!important;letter-spacing:-.035em!important;}
+.type-system :is(.case-chapter-heading .notion-heading,.hierarchy-project-title h3) {font:var(--type-heading)!important;letter-spacing:-.035em!important;}
+/* Section titles override the shared chapter role above. */
+.type-system .case-chapter--intro .case-chapter-heading .notion-heading {font:var(--type-section)!important;letter-spacing:-.05em!important;}
+.type-system .case-chapter--results .case-chapter-heading .notion-heading {font:var(--type-page)!important;letter-spacing:-.05em!important;}
+.type-system :is(.case-subtitle,.case-note__title,.experience-card h3,.remaining-caption h3) {font:var(--type-title)!important;letter-spacing:-.02em!important;}
+.type-system .semantic-outcome .notion-paragraph {font:var(--type-lead)!important;letter-spacing:0!important;}
+.type-system :is(.notion-renderer,.case-description,.case-meta-item .notion-paragraph,.case-chapter>.notion-paragraph,.case-result-description .notion-paragraph,.case-chapter>.notion-list li,.notion-semantic-callout__body>.notion-paragraph) {font:var(--type-body)!important;letter-spacing:0!important;}
+.type-system :is(.hierarchy-specialty,.hierarchy-project-description,.about-copy p,.experience-card p,.case-note__content>.notion-paragraph,.case-note--aside .notion-paragraph) {font:var(--type-compact)!important;letter-spacing:0!important;}
+.type-system :is(.hierarchy-profile-facts p,.about-number p,.hierarchy-project-result,.footer-bottom,.footer-bottom>span,.contact-address,.figma-disclosure__content>a) {font:var(--type-small)!important;letter-spacing:0!important;}
+.type-system :is(.site-footer .footer-contacts a,.footer-bottom a,.case-all-projects,.figma-disclosure__label,.figma-disclosure__label>span,.contact-link,.contact-channel),.site-nav.type-system nav>a {font:var(--type-action)!important;letter-spacing:0!important;}
+.type-system :is(.eyebrow,.chapter-index,.case-tags>span,.case-meta-item .notion-heading,.case-step-label,.hierarchy-project-result>span,.remaining-heading h2>span,.work-count),.site-nav.type-system sup {font:var(--type-label)!important;letter-spacing:.06em!important;}
+.type-system :is(h1,h2,h3,h4,h5,.scroll-statement) :is(span,strong,em),.type-system .footer-cta>span {font:inherit!important;letter-spacing:inherit!important;}
+.type-system :is(.work-count,.remaining-heading h2>span) {font:var(--type-label)!important;letter-spacing:.06em!important;}
+.type-system :is(p,li) strong {font-weight:600!important;}
+.type-system .experience-card__dates strong,.type-system .footer-bottom strong {font:inherit!important;}
+/* Arrows are pictograms: use the title scale instead of one-off text sizes. */
+.type-system :is(.hierarchy-project-title>span,.remaining-arrow) {font:var(--type-title)!important;letter-spacing:0!important;}
+
+.type-system .hierarchy-profile-facts strong {font-size:inherit!important;line-height:inherit!important;letter-spacing:inherit!important;}
+.type-system .semantic-outcome .notion-semantic-callout__body>.notion-paragraph {font:var(--type-lead)!important;letter-spacing:0!important;}
+.type-system .notion-paragraph>em {font:var(--type-small)!important;letter-spacing:0!important;}
+.type-system .retro-loader__title {font:var(--type-heading)!important;letter-spacing:-.035em!important;}
+.type-system :is(.retro-loader__caption,.retro-loader__status) {font:var(--type-label)!important;letter-spacing:.06em!important;}
+
+/* SVG sizes are canvas units, independent of the page's responsive text scale. */
+.type-system :is(.studio-art,.studio-art-vector,.discount-motion,.studio-cover) text {
+  font-family:DiscountGolos,sans-serif!important;font-weight:400!important;line-height:1!important;letter-spacing:0!important;
+}
+.type-system :is(.studio-art,.studio-art-vector,.discount-motion,.studio-cover) :is(.art-mono,.dm-mono,text[font-family*="Mono"]) {font-family:DiscountMono,monospace!important;}
+.type-system svg text[font-size="12"] {font-size:12px!important;}
+.type-system svg :is(text[font-size="13"],text[font-size="14"],text[font-size="15"],text[font-size="16"],text[font-size="17"],text[font-size="18"]) {font-size:16px!important;}
+.type-system svg :is(text[font-size="19"],text[font-size="20"],text[font-size="21"],text[font-size="22"]) {font-size:20px!important;}
+.type-system svg :is(text[font-size="23"],text[font-size="24"],text[font-size="25"],text[font-size="26"]) {font-size:24px!important;}
+.type-system svg :is(text[font-size="28"],text[font-size="29"],text[font-size="31"],text[font-size="32"],text[font-size="33"]) {font-size:28px!important;}
+.type-system svg text[font-size="44"] {font-size:44px!important;}
+.type-system svg text[font-size="52"] {font-size:52px!important;}
+.type-system svg text[font-size="83"] {font-size:80px!important;}
+.type-system :is(.studio-art,.studio-art-vector,.discount-motion,.studio-cover) :is(text[font-weight="500"],text[font-weight="600"],text[font-weight="700"]) {font-weight:500!important;}
+
+@media(max-width:680px) {
+  .type-system {
+    --type-display:600 clamp(4rem,15vw,6rem)/1 var(--type-family);
+    --type-section:500 2.25rem/1.1 var(--type-family);
+    --type-page:500 2.25rem/1.1 var(--type-family);
+    --type-statement:400 1.5rem/1.2 var(--type-family);
+    --type-heading:500 1.75rem/1.2 var(--type-family);
+    --type-title:500 1.5rem/1.3 var(--type-family);
+    --type-body:400 1rem/1.6 var(--type-family);
+  }
+}

@@ -1,0 +1,33 @@
+[
+  {
+    "output": "public/media/settings-islands-equal-gaps-2k.mp4",
+    "sha256": "f1cd28c3ee75a2bfd80d8f4ec3dc94190cd3ecb8db68bd4b781faa59f6615315",
+    "parts": [
+      "media-source/settings-islands-equal-gaps-2k.mp4/000.part",
+      "media-source/settings-islands-equal-gaps-2k.mp4/001.part",
+      "media-source/settings-islands-equal-gaps-2k.mp4/002.part",
+      "media-source/settings-islands-equal-gaps-2k.mp4/003.part",
+      "media-source/settings-islands-equal-gaps-2k.mp4/004.part"
+    ]
+  },
+  {
+    "output": "public/media/settings-product-entry.webp",
+    "sha256": "e0539baf60a91122da242b55710c1f8b35ae249f35caf590c5f16890313808f3",
+    "parts": [
+      "media-source/settings-product-entry.webp/000.part",
+      "media-source/settings-product-entry.webp/001.part",
+      "media-source/settings-product-entry.webp/002.part"
+    ]
+  },
+  {
+    "output": "public/media/settings-islands-studio-2k.mp4",
+    "sha256": "d108aa0e1584b3c55d37da7e071f809f449ba2246ecfbb83ab817156233104b6",
+    "parts": [
+      "media-source/settings-islands-studio-2k.mp4/000.part",
+      "media-source/settings-islands-studio-2k.mp4/001.part",
+      "media-source/settings-islands-studio-2k.mp4/002.part",
+      "media-source/settings-islands-studio-2k.mp4/003.part",
+      "media-source/settings-islands-studio-2k.mp4/004.part"
+    ]
+  }
+]

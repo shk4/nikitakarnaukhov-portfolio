@@ -1,0 +1,63 @@
+/* Existing type tokens; density comes from layout rather than smaller copy. */
+.motion-case .case-reading-switch{margin:0;}
+.motion-case .case-intro .case-subtitle{font:var(--type-body)!important;}
+.motion-case .case-tldr .tldr-overview{grid-template-columns:minmax(0,.6fr) minmax(0,1.3fr) minmax(0,1.3fr);gap:32px;margin-bottom:40px;}
+.motion-case .case-tldr .tldr-facts,.motion-case .case-tldr .tldr-context,.motion-case .case-tldr .tldr-contribution{grid-column:auto;min-width:0;}
+.motion-case .tldr-overview h2{font:var(--type-action);color:var(--muted);margin:0 0 8px;letter-spacing:0;}
+.motion-case .tldr-overview p{font:var(--type-body);margin:0;}
+.motion-case .tldr-facts p{font:var(--type-compact);margin:0;}
+.motion-case .tldr-facts>div+div{margin-top:20px;}
+.motion-case .tldr-results{padding-block:28px;margin-bottom:56px;gap:28px;}
+.motion-case .tldr-result-value{font:var(--type-page);}
+.motion-case .tldr-result-value--text{font:var(--type-heading);overflow-wrap:normal;}
+.motion-case .tldr-section{margin-bottom:80px;padding-top:24px;}
+.motion-case .tldr-section>.notion-figure{margin-top:28px;}
+@media(max-width:1000px){
+ .motion-case .case-tldr .tldr-overview{grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;}
+ .motion-case .case-tldr .tldr-facts{grid-column:1/-1;display:flex;gap:40px;}
+ .motion-case .tldr-facts>div+div{margin:0;}
+}
+@media(max-width:760px){
+ .motion-case .case-reading-switch button{padding-inline:12px;}
+ .motion-case .case-all-projects{padding-inline:0;}
+ .motion-case .case-intro .case-subtitle{font:var(--type-compact)!important;}
+ .motion-case .case-tldr .tldr-overview{display:block;margin-bottom:32px;}
+ .motion-case .tldr-facts{display:flex;gap:32px;margin-bottom:24px;}
+ .motion-case .tldr-context{margin:0 0 24px;}
+ .motion-case .tldr-overview p{font:var(--type-body);}
+ .motion-case .tldr-facts p{font:var(--type-compact);}
+ .motion-case .tldr-results{grid-template-columns:1fr;gap:28px;margin-bottom:40px;}
+ .motion-case .tldr-section{margin-bottom:56px;}
+}
+/* Match the main site's hierarchy and columns; only the vertical rhythm is tighter. */
+.motion-case .case-project-nav{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:16px;}
+.motion-case .case-project-nav>.case-all-projects{grid-column:1;grid-row:1;justify-self:start;}
+.motion-case .case-reading-switch{grid-column:2;grid-row:1;justify-self:center;}
+.motion-case[data-reading-mode="detailed"] .notion-page--case{--type-page:500 clamp(2.25rem,4.2vw,4rem)/1.1 var(--type-family);}
+.motion-case[data-reading-mode="detailed"] .case-overview{margin-bottom:72px;}
+.motion-case[data-reading-mode="detailed"] .case-meta-columns{margin-bottom:0;}
+.motion-case[data-reading-mode="detailed"] .case-meta-stack{gap:24px;}
+.motion-case[data-reading-mode="detailed"] .case-meta-item .notion-heading--4{margin-bottom:8px;}
+.motion-case[data-reading-mode="detailed"] .case-chapter:not(.case-chapter--intro){margin-bottom:108px;padding-top:36px;}
+.motion-case[data-reading-mode="detailed"] .case-chapter--intro{margin-top:104px;margin-bottom:48px;}
+.motion-case[data-reading-mode="detailed"] .case-chapter>.notion-paragraph{margin-bottom:16px;}
+.motion-case[data-reading-mode="detailed"] .case-chapter>.notion-list{margin-bottom:20px;}
+.motion-case[data-reading-mode="detailed"] .case-chapter>.notion-list>li{padding-bottom:8px;margin-bottom:8px;}
+.motion-case[data-reading-mode="detailed"] .case-chapter:has(+ .case-chapter--continuation){margin-bottom:56px;}
+.motion-case[data-reading-mode="detailed"] .case-chapter.case-chapter--continuation{border-top:0;padding-top:0;}
+.visual-case-cover .visual-cover-art>img{transition:transform .7s cubic-bezier(.2,.75,.25,1);}
+.visual-cover-art:focus-visible{outline:2px solid var(--accent);outline-offset:-3px;}
+@media(hover:hover) and (prefers-reduced-motion:no-preference){
+ .visual-case-cover .visual-cover-art:hover>img,.visual-case-cover .visual-cover-art:focus-visible>img{transform:scale(1.015);}
+}
+@media(max-width:760px){
+ .motion-case .case-project-nav{grid-template-columns:1fr;gap:14px;}
+ .motion-case .case-reading-switch{grid-column:1;grid-row:2;justify-self:center;}
+ .motion-case[data-reading-mode="detailed"] .case-overview{margin-bottom:48px;}
+ .motion-case[data-reading-mode="detailed"] .case-meta-stack+.case-meta-stack{margin-top:24px;}
+ .motion-case[data-reading-mode="detailed"] .case-chapter:not(.case-chapter--intro){margin-bottom:68px;padding-top:28px;}
+ .motion-case[data-reading-mode="detailed"] .case-chapter--intro{margin-top:64px;margin-bottom:36px;}
+ .motion-case[data-reading-mode="detailed"] .case-chapter:has(+ .case-chapter--continuation){margin-bottom:44px;}
+ .motion-case[data-reading-mode="detailed"] .case-chapter.case-chapter--continuation{padding-top:0;}
+}
+@media(prefers-reduced-motion:reduce){.visual-case-cover .visual-cover-art>img{transition:none;}}

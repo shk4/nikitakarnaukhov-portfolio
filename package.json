@@ -8,6 +8,7 @@
   "scripts": {
     "install:ci": "npm ci",
     "dev": "vinext dev",
+    "start": "vinext start",
     "build": "node scripts/restore-media.mjs && vinext build",
     "test": "npm run build && node scripts/check-static-export.mjs",
     "validate:artifact": "node scripts/check-static-export.mjs",

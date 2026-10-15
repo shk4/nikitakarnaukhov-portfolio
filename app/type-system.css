@@ -16,6 +16,7 @@
   font-family:var(--type-family);
 }
 .type-system :is(.hierarchy-hero h1,.about-number>span) {font:var(--type-display)!important;letter-spacing:-.065em!important;}
+.type-system .hierarchy-hero h1 {letter-spacing:-.069em!important;}
 .type-system :is(.hierarchy-work-heading h2,.studio-section-heading h2,.remaining-heading h2,.case-chapter--intro .notion-heading) {font:var(--type-section)!important;letter-spacing:-.05em!important;}
 .type-system :is(.case-intro h1,.case-note--result>.case-note__mark,.case-chapter--results .case-chapter-heading .notion-heading,.footer-cta) {font:var(--type-page)!important;letter-spacing:-.05em!important;}
 .type-system .scroll-statement {font:var(--type-statement)!important;letter-spacing:-.035em!important;}

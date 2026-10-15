@@ -33,7 +33,7 @@ export function HomeView({variant:requestedVariant}:{variant?:StudyId}) {
         <img className="hierarchy-portrait" src="/media/avatar-2026.png" alt="Никита Карнаухов" width="128" height="128"/>
         <p className="hierarchy-specialty">Проектирую продукты, которыми удобно пользоваться каждый день.</p>
         <div className="hierarchy-profile-facts">
-          <p className="hierarchy-experience"><strong>8+ лет</strong> в продуктовой разработке</p>
+          <p className="hierarchy-experience"><strong>9+ лет</strong> в продуктовой разработке</p>
           <p className="hierarchy-location">Самара · <strong>Готов к переезду</strong></p>
         </div>
       </aside>
@@ -51,7 +51,7 @@ export function HomeView({variant:requestedVariant}:{variant?:StudyId}) {
         </a>; })}
       </div>
     </section>
-    <section className="studio-about" id="about"><div className="studio-section-heading"><h2>Опыт</h2></div><div className="studio-about-grid"><div className="about-number"><span>8+</span><p>лет в продуктовой<br/>разработке</p></div><div><ScrollStatement>Я был по обе стороны продуктовых решений – как Product Manager и как Product Designer. Поэтому думаю о бизнесе, исследую поведение людей и довожу интерфейсы до запуска.</ScrollStatement><div className="about-copy"><p>Мои сильные стороны — сложные продуктовые интерфейсы, исследования, приоритизация и управление командой.</p><p>Работаю удалённо из Самары. Рассматриваю переезд. Открыт к обсуждению продуктовых задач.</p></div></div></div><Experience /></section>
+    <section className="studio-about" id="about"><div className="studio-section-heading"><h2>Опыт</h2></div><div className="studio-about-grid"><div className="about-number"><span>9+</span><p>лет в продуктовой<br/>разработке</p></div><div><ScrollStatement>Я был по обе стороны продуктовых решений – как Product Manager и как Product Designer. Поэтому думаю о бизнесе, исследую поведение людей и довожу интерфейсы до запуска.</ScrollStatement><div className="about-copy"><p>Мои сильные стороны — сложные продуктовые интерфейсы, исследования, приоритизация и управление командой.</p><p>Работаю удалённо из Самары. Рассматриваю переезд. Открыт к обсуждению продуктовых задач.</p></div></div></div><Experience /></section>
     <SiteFooter />
   </main>);
 }

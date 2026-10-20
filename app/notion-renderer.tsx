@@ -4,6 +4,7 @@ import { shotPresentation } from "./shot-presentation";
 import { mediaDimensions } from "./media-dimensions";
 import type { CSSProperties, ReactNode } from "react";
 import { FigmaDisclosure } from "@/app/figma-disclosure";
+import { SettingsSystemAnimation } from "./settings-system-animation";
 import { typograph } from "./typography";
 
 type BlockNode = {
@@ -464,16 +465,19 @@ function renderNode(node: BlockNode, key: string): ReactNode {
     const presentation = shotPresentation(imageUrl);
     const isPersonalizationAnimation =
       imageUrl === "/media/personalization-live-mosaic-2k.mp4";
-    if (imageUrl === "/media/settings-system-tall-5120.png" || isPersonalizationAnimation) {
+    if (imageUrl === "/media/settings-system-tall-5120.png") {
+      return <figure className="notion-figure" key={key}>
+        <div className="media-clip media-clip--animation">
+          <SettingsSystemAnimation label={node.text || "Настройки конструктора"} />
+        </div>
+      </figure>;
+    }
+    if (isPersonalizationAnimation) {
       return (
         <figure className="notion-figure" key={key}>
           <div className="media-clip media-clip--animation"><video
-            src={isPersonalizationAnimation
-              ? "/media/personalization-studio-smooth-2k.mp4?v=original-motion-2"
-              : "/media/settings-islands-studio-2k.mp4?v=gray-1"}
-            poster={isPersonalizationAnimation
-              ? "/media/personalization-studio-poster.png?v=gray-1"
-              : "/media/settings-islands-studio-poster.png?v=gray-1"}
+            src="/media/personalization-studio-smooth-2k.mp4?v=original-motion-2"
+            poster="/media/personalization-studio-poster.png?v=gray-1"
             autoPlay
             muted
             loop

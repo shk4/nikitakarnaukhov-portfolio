@@ -23,7 +23,7 @@
 .type-system .tldr-result-value--text{font:var(--type-heading);letter-spacing:-.035em;}
 .type-system .tldr-result h2{font:var(--type-compact);font-weight:500;margin:0 0 8px;}
 .type-system .tldr-result-note{font:var(--type-small);color:var(--muted);margin:0;}
-.case-tldr .tldr-section{margin:0 0 120px;padding:32px 0 0;border:0;row-gap:0;}
+.case-tldr .tldr-section{margin:0 0 120px;padding:32px 0 0;border:0;border-top:1px solid var(--line);row-gap:0;}
 .case-tldr .tldr-section .case-chapter-heading{grid-row:1;padding:0;}
 .case-tldr .tldr-section>.tldr-section-copy{margin:0;}
 .case-tldr .tldr-section>.notion-figure{margin-top:40px;margin-bottom:24px;}

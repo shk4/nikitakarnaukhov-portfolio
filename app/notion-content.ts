@@ -14,7 +14,6 @@ export type PortfolioCase = {
   title: string;
   description: string;
   icon: string;
-  cover: string;
   source: NotionPayload;
 };
 
@@ -37,7 +36,7 @@ const settingsShots = new Map<string, string>([
   ],
   [
     "Самым объёмным стал прототип кликабельных областей и навигации между уровнями блока.",
-    "![Как проверял решение](/media/settings-validation.png)",
+    "![Как проверял решение](/media/settings-validation.webp)",
   ],
   [
     "*Точка входа в настройку динамического вывода*",
@@ -62,22 +61,6 @@ function withSettingsShots(source: NotionPayload): NotionPayload {
   };
 }
 
-function withPersonalizationAnimation(source: NotionPayload): NotionPayload {
-  const sectionMedia =
-    '<unknown url="https://app.notion.com/p/496dc95a74b78366981981733c51b114#38fdc95a74b7829093518143dbee79b4" alt="figma"/>';
-
-  return {
-    ...source,
-    text: source.text.replace(
-      sectionMedia,
-      `![Окна добавления и редактирования переменных](/media/personalization-live-mosaic-2k.mp4)\n${sectionMedia}`,
-    ).replace(
-      '<unknown url="https://app.notion.com/p/496dc95a74b78366981981733c51b114#a9fdc95a74b782418d378173cd6befd9"',
-      '![Систематизация цен и скидок](/media/discount-system-motion)\n<unknown url="https://app.notion.com/p/496dc95a74b78366981981733c51b114#a9fdc95a74b782418d378173cd6befd9"',
-    ),
-  };
-}
-
 export const portfolioCases: PortfolioCase[] = [
   {
     slug: "email-builder-settings",
@@ -85,7 +68,6 @@ export const portfolioCases: PortfolioCase[] = [
     description:
       "Превратил разрозненные настройки блоков в единую масштабируемую систему. 14 крупных клиентов полностью перешли на новый конструктор.",
     icon: "🏗️",
-    cover: "/media/cover-settings.png",
     source: withSettingsShots(settings as NotionPayload),
   },
   {
@@ -94,8 +76,7 @@ export const portfolioCases: PortfolioCase[] = [
     description:
       "Перенёс работу с клиентскими и товарными данными из HTML в интерфейс конструктора. 113 клиентов начали запускать большую часть рассылок в новом инструменте.",
     icon: "🪄",
-    cover: "/media/cover-personalization-main.png",
-    source: withPersonalizationAnimation(personalization as NotionPayload),
+    source: personalization as NotionPayload,
   },
   {
     slug: "image-gallery",
@@ -103,7 +84,6 @@ export const portfolioCases: PortfolioCase[] = [
     description:
       "Спроектировал единое пространство для хранения и повторного использования изображений. Решение закрыло обращения 16 клиентов.",
     icon: "🖼️",
-    cover: "/media/cover-gallery.png",
     source: gallery as NotionPayload,
   },
   {
@@ -112,7 +92,6 @@ export const portfolioCases: PortfolioCase[] = [
     description:
       "Пересобрал один из центральных разделов Mindbox вокруг задач маркетолога и заложил основу нового визуального языка продукта.",
     icon: "📢",
-    cover: "/media/cover-campaigns.png",
     source: campaigns as NotionPayload,
   },
   {
@@ -121,7 +100,6 @@ export const portfolioCases: PortfolioCase[] = [
     description:
       "Развивал компоненты и паттерны на основе реальных продуктовых сценариев: обновил базовые контролы, добавил недостающие состояния и описал правила использования.",
     icon: "/media/icon-figma.svg",
-    cover: "/media/cover-design-system.png",
     source: designSystem as NotionPayload,
   },
 ];

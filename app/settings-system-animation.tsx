@@ -1,78 +1,36 @@
 "use client";
+import { MediaImage } from "./media-image";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
+import columns from "./island-columns.json";
 
-/** Resume the case video after scrolling, navigation and browser suspension. */
+/** Compositor-driven layers: no video buffering, play promises or frame timers. */
 export function SettingsSystemAnimation({ label }: { label: string }) {
-  const ref = useRef<HTMLVideoElement>(null);
-  const [needsControls, setNeedsControls] = useState(false);
-
+  const root = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
+  const [paused, setPaused] = useState(false);
   useEffect(() => {
-    const video = ref.current;
-    if (!video) return;
-    let active = true;
-    let pending = false;
-    let retryQueued = false;
-    const bounds = video.getBoundingClientRect();
-    let visible = bounds.bottom > 0 && bounds.top < window.innerHeight;
-
-    // Set the DOM properties as well as the markup before requesting playback.
-    video.defaultMuted = true;
-    video.muted = true;
-
-    const resume = () => {
-      if (!active) return;
-      if (!visible || document.visibilityState === "hidden") {
-        video.pause();
-        return;
-      }
-      if (pending) { retryQueued = true; return; }
-      if (!video.paused) return;
-      pending = true;
-      video.play().catch((error: unknown) => {
-        // Scrolling away can abort an in-flight play request; retry on re-entry.
-        if (active && !(error instanceof DOMException && error.name === "AbortError")) {
-          setNeedsControls(true);
-        }
-      }).finally(() => {
-        pending = false;
-        if (retryQueued) { retryQueued = false; resume(); }
-      });
-    };
-
+    const element = root.current;
+    if (!element) return;
+    let intersects = false;
+    const update = () => setVisible(intersects && !document.hidden);
     const observer = new IntersectionObserver(([entry]) => {
-      visible = entry.isIntersecting;
-      resume();
+      intersects = entry.isIntersecting;
+      update();
     });
-    observer.observe(video);
-    video.addEventListener("loadeddata", resume);
-    video.addEventListener("canplay", resume);
-    const figure = video.closest("figure");
-    figure?.addEventListener("transitionend", resume);
-    document.addEventListener("visibilitychange", resume);
-    window.addEventListener("pageshow", resume);
-    resume();
-
-    return () => {
-      active = false;
-      observer.disconnect();
-      video.removeEventListener("loadeddata", resume);
-      video.removeEventListener("canplay", resume);
-      figure?.removeEventListener("transitionend", resume);
-      document.removeEventListener("visibilitychange", resume);
-      window.removeEventListener("pageshow", resume);
-      video.pause();
-    };
+    observer.observe(element);
+    document.addEventListener("visibilitychange", update);
+    return () => { observer.disconnect(); document.removeEventListener("visibilitychange", update); };
   }, []);
 
-  return <video
-    ref={ref}
-    src="/media/settings-islands-studio-2k.mp4?v=playback-2"
-    poster="/media/settings-islands-studio-poster.png?v=gray-1"
-    autoPlay muted loop playsInline preload="metadata"
-    controls={needsControls} disablePictureInPicture
-    width={2560} height={1200} aria-label={label}
-    onPlay={() => setNeedsControls(false)}
-    onError={() => setNeedsControls(true)}
-  />;
+  return <div ref={root} className="settings-islands" data-running={visible && !paused}>
+    <div className="settings-islands__scene" role="img" aria-label={label}>
+      {columns.map((column, i) => <div className="settings-islands__column" key={column.src}>
+        <div className="settings-islands__track" style={{ "--duration": `${42 + i * 3}s`, "--delay": `${-i * 7}s`, animationDirection: i % 2 ? "reverse" : "normal" } as CSSProperties}>
+          {[0, 1].map(copy => <MediaImage key={copy} src={column.src} width={column.width} height={column.height} alt="" aria-hidden="true" loading="lazy" decoding="async" draggable={false} />)}
+        </div>
+      </div>)}
+    </div>
+    <button type="button" className="settings-islands__pause" aria-pressed={paused} aria-label={paused ? "Продолжить анимацию" : "Приостановить анимацию"} onClick={() => setPaused(value => !value)}>{paused ? "Продолжить" : "Пауза"}</button>
+  </div>;
 }

@@ -4,7 +4,6 @@
 .notion-figure--wide .media-clip{border-radius:15px;}
 .source-rounded--noise{clip-path:inset(1px round 1.8% / 3.525%);}
 .source-rounded--structure{clip-path:inset(1px round 1.8% / 2.975%);}
-.notion-figure video[src*="settings-islands"]{clip-path:inset(1px round 1.8% / 3.84%);}
 .notion-page--case{width:min(100%,1440px);padding:100px max(36px,5vw) 80px;}
 .notion-renderer{font-size:18px;line-height:1.7;}
 .case-overview{margin:0 0 95px;}

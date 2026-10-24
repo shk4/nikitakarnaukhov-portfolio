@@ -1,0 +1,113 @@
+/* Final geometry for the six live pages. Twelve tracks, one gutter and one
+   canvas; component styling must not introduce independent page columns. */
+:root { --content-max: 1440px; }
+.visual-case .project-hero,
+.visual-case .notion-page--case,
+.visual-case .remaining-projects {
+  width: 100%;
+  max-width: none;
+  margin-inline: 0;
+  padding-inline: var(--gutter);
+}
+
+@media (min-width: 761px) {
+  .portfolio-home .portfolio-intro__main,
+  .portfolio-home .hierarchy-projects,
+  .visual-case .case-intro,
+  .visual-case .case-meta-columns,
+  .visual-case .case-chapter,
+  .visual-case .case-tldr .tldr-overview,
+  .visual-case .editorial-overview,
+  .visual-case .tldr-results,
+  .visual-case .editorial-results,
+  .visual-case .outcome-grid,
+  .visual-case .case-tldr .tldr-conclusion,
+  .visual-case .editorial-conclusion,
+  .site-footer .footer-bottom {
+    display: grid;
+    grid-template-columns: var(--grid-columns);
+    column-gap: var(--grid-gap);
+  }
+  .portfolio-intro__copy { grid-column: 1 / span 8; min-width: 0; }
+  .portfolio-home .portfolio-intro__profile {
+    grid-column: 9 / -1;
+    min-width: 0;
+    padding-left: 0;
+    border-left: 0;
+  }
+  .portfolio-home .hierarchy-project { grid-column: span 6; }
+  .visual-case .case-intro > h1 { grid-column: 1 / span 8; max-width: none; }
+  .visual-case .case-intro > .case-subtitle { grid-column: 9 / -1; max-width: none; }
+
+  /* Intro facts, context and contribution share the result-card starts. */
+  .visual-case .case-tldr .tldr-overview > *,
+  .visual-case .editorial-overview > * {
+    grid-column: span 4;
+    min-width: 0;
+  }
+  .visual-case .case-tldr .tldr-facts { display: block; }
+  .visual-case .tldr-facts > div + div { margin-top: 20px; }
+  .visual-case :is(.tldr-result, .editorial-result, .outcome-grid > *) { grid-column: span 4; }
+  .visual-case :is(.tldr-results, .editorial-results):has(> :last-child:nth-child(2)) > *,
+  .visual-case :is(.outcome-grid--2, .outcome-grid--4, .outcome-grid--5) > * { grid-column: span 6; }
+  .visual-case :is(.tldr-results, .editorial-results, .outcome-grid) > :only-child { grid-column: 1 / -1; }
+
+  /* Shared rows align labels even when a value is text rather than a number. */
+  .visual-case :is(.tldr-results, .editorial-results) { row-gap: 12px; }
+  .visual-case :is(.tldr-result, .editorial-result) {
+    display: grid;
+    grid-row: span 3;
+    grid-template-rows: subgrid;
+    row-gap: 12px;
+  }
+  .visual-case :is(.tldr-result, .editorial-result) > * { margin: 0; }
+
+  .visual-case .case-chapter > .case-chapter-heading,
+  .visual-case .tldr-conclusion > h2,
+  .visual-case .editorial-conclusion > h2 { grid-column: 1 / span 4; }
+  .visual-case .case-chapter > :not(.case-chapter-heading),
+  .visual-case .tldr-conclusion > p,
+  .visual-case .editorial-conclusion > div { grid-column: 5 / -1; }
+  .visual-case .case-chapter > :is(.notion-figure, .figma-disclosure, .outcome-grid, .case-note--figma),
+  .visual-case .case-chapter--results > .case-chapter-heading { grid-column: 1 / -1; }
+  .visual-case .case-chapter--intro { display: block; }
+  .visual-case .case-chapter > :is(.notion-figure, .figma-disclosure) {
+    width: 100%; max-width: none; margin-inline: 0; transform: none;
+  }
+  .site-footer .footer-bottom > span:first-child { grid-column: 1 / span 4; }
+  .site-footer .footer-bottom > div { grid-column: 5 / span 4; }
+  .site-footer .footer-bottom > span:last-child { grid-column: 9 / -1; }
+  .site-footer .footer-contacts { padding-left: calc((100% + var(--grid-gap)) / 3); }
+}
+
+@media (min-width: 761px) and (max-width: 1000px) {
+  .portfolio-intro__copy { grid-column: 1 / span 6; }
+  .portfolio-home .portfolio-intro__profile { grid-column: 7 / -1; }
+  .visual-case .case-intro > h1 { grid-column: 1 / span 7; }
+  .visual-case .case-intro > .case-subtitle { grid-column: 8 / -1; }
+}
+
+/* Project suggestions stay on the canvas instead of a second horizontal grid. */
+.visual-case .remaining-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-auto-flow: row;
+  grid-auto-columns: auto;
+  gap: 32px var(--grid-gap);
+  overflow: visible;
+  padding-bottom: 0;
+}
+@media (max-width: 1000px) {
+  .visual-case .remaining-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 760px) {
+  .visual-case .case-chapter > :is(.notion-figure, .figma-disclosure) {
+    width: 100%; max-width: none; margin-inline: 0; transform: none;
+  }
+  .visual-case :is(.tldr-results, .editorial-results) {
+    grid-template-columns: minmax(0, 1fr);
+    column-gap: var(--grid-gap);
+  }
+}
+@media (max-width: 480px) {
+  .visual-case .remaining-grid { grid-template-columns: minmax(0, 1fr); }
+}

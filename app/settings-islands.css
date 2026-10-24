@@ -1,0 +1,11 @@
+.settings-islands{position:relative;overflow:hidden;aspect-ratio:32/15;background:#303332;contain:layout paint;isolation:isolate;}
+.settings-islands__scene{position:absolute;width:112%;left:-6%;top:-32%;transform:rotate(6deg);transform-origin:50% 0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:1%;}
+.settings-islands__column{min-width:0;}
+.settings-islands__track{animation:islands-drift var(--duration) linear var(--delay) infinite;animation-play-state:paused;will-change:transform;}
+.settings-islands[data-running="true"] .settings-islands__track{animation-play-state:running;}
+.settings-islands .settings-islands__track>img{display:block;width:100%;height:auto;max-width:none;margin:0;border:0;border-radius:0;box-shadow:none;}
+.settings-islands__pause{position:absolute;right:12px;bottom:12px;z-index:1;border:1px solid #ffffff30;border-radius:6px;padding:6px 10px;background:#242726e6;color:#e5e7e6;font-family:inherit;font-size:12px;line-height:1.4;cursor:pointer;opacity:0;transition:opacity .15s;}
+.settings-islands:hover .settings-islands__pause,.settings-islands:focus-within .settings-islands__pause{opacity:1;}
+@keyframes islands-drift{from{transform:translate3d(0,0,0)}to{transform:translate3d(0,-50%,0)}}
+@media(hover:none){.settings-islands__pause{opacity:1;}}
+@media(prefers-reduced-motion:reduce){.settings-islands .settings-islands__track{animation:none;will-change:auto;}.settings-islands__pause{display:none;}}

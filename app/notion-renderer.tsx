@@ -1,3 +1,4 @@
+import { MediaImage } from "./media-image";
 import { StudioArt, hasStudioArt } from "./studio-art";
 import { DiscountMotion } from "./discount-motion";
 import { shotPresentation } from "./shot-presentation";
@@ -5,6 +6,7 @@ import { mediaDimensions } from "./media-dimensions";
 import type { CSSProperties, ReactNode } from "react";
 import { FigmaDisclosure } from "@/app/figma-disclosure";
 import { SettingsSystemAnimation } from "./settings-system-animation";
+import { CaseVideo } from "./case-video";
 import { typograph } from "./typography";
 
 type BlockNode = {
@@ -461,7 +463,7 @@ function renderNode(node: BlockNode, key: string): ReactNode {
     const imageUrl = localMediaUrl(node.url);
     if (hasStudioArt(imageUrl)) return <figure className="notion-figure" key={key}><div className="media-clip"><StudioArt file={imageUrl.split("/").pop()!}/></div></figure>;
     if (imageUrl === "/media/discount-system-motion") return <figure className="notion-figure" key={key}><DiscountMotion /></figure>;
-    if (imageUrl === "/media/figma-shots/shot-01.webp") return <figure className="notion-figure" key={key}><div className="media-clip"><video src="/media/settings-product-scenario.mp4" autoPlay muted loop playsInline preload="metadata" width={2796} height={1570} aria-label="Настройка динамического вывода продуктов" /></div></figure>;
+    if (imageUrl === "/media/figma-shots/shot-01.webp") return <figure className="notion-figure" key={key}><div className="media-clip"><CaseVideo src="/media/settings-product-web.mp4" poster="/media/settings-product-poster.webp" width={1920} height={1078} label="Настройка динамического вывода продуктов" /></div></figure>;
     const presentation = shotPresentation(imageUrl);
     const isPersonalizationAnimation =
       imageUrl === "/media/personalization-live-mosaic-2k.mp4";
@@ -475,26 +477,19 @@ function renderNode(node: BlockNode, key: string): ReactNode {
     if (isPersonalizationAnimation) {
       return (
         <figure className="notion-figure" key={key}>
-          <div className="media-clip media-clip--animation"><video
-            src="/media/personalization-studio-smooth-2k.mp4?v=original-motion-2"
-            poster="/media/personalization-studio-poster.png?v=gray-1"
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="auto"
-            controls={false}
-            disablePictureInPicture
-            width={2560}
-            height={1200}
-            aria-label={node.text || "Настройки конструктора"}
+          <div className="media-clip media-clip--animation"><CaseVideo
+            src="/media/personalization-web.mp4"
+            poster="/media/personalization-poster.webp"
+            width={1920}
+            height={900}
+            label={node.text || "Настройки конструктора"}
           /></div>
         </figure>
       );
     }
     const className = [
       "/media/settings-system-tall-5120.png",
-      "/media/settings-validation.png",
+      "/media/settings-validation.webp",
     ].includes(imageUrl)
       ? "notion-figure"
       : isWideCaseShot(imageUrl)
@@ -504,7 +499,7 @@ function renderNode(node: BlockNode, key: string): ReactNode {
     return (
       <figure className={className} key={key}>
         <div className={`media-clip${imageUrl.endsWith("shot-08.webp") ? " media-clip--gallery-top" : ""}`} style={presentation?.surface}>
-        <img
+        <MediaImage
           style={presentation?.image}
           alt={node.text || "Иллюстрация проекта"}
           decoding="async"
@@ -532,7 +527,7 @@ function renderNode(node: BlockNode, key: string): ReactNode {
   return <div className="notion-empty" key={key} aria-hidden="true" />;
 }
 
-export function NotionRenderer({ source }: { source: string }) {
+export function NotionRenderer({ source, section = "all" }: { source: string; section?: "all" | "summary" | "results" }) {
   const content = source.match(/<content>\n([\s\S]*?)\n<\/content>/)?.[1] || "";
   const [parsedNodes] = parseSequence(content.split("\n"), 0);
   const nodes = parsedNodes.filter((node, index) => {
@@ -580,8 +575,11 @@ export function NotionRenderer({ source }: { source: string }) {
     return result;
   };
   const detailedResultsIndex = groups.findIndex(group => /^Результаты подробнее$/i.test((group.heading?.text || "").replace(/\*\*/g, "").trim()));
-  return <div className="notion-renderer">
+  const summaryIndex = groups.findIndex(group => group.heading?.level === 1 && /^Результат(?: в цифрах)?$/i.test((group.heading.text || "").replace(/\*\*/g, "").trim()));
+  return <div className={`notion-renderer${section !== "all" ? " case-detailed-results" : ""}`}>
     {groups.map((group, index) => {
+      if (section === "results" && (detailedResultsIndex < 0 || index < detailedResultsIndex)) return null;
+      if (section === "summary" && index !== summaryIndex) return null;
       if (!group.heading) return <div className="case-overview" key={index}>{renderBody(group.body, index)}</div>;
       const title = (group.heading.text || "").replace(/\*\*/g, "");
       const number = title.match(/^(\d+)\.\s*/);
@@ -602,7 +600,7 @@ export function NotionRenderer({ source }: { source: string }) {
       return <section className={`case-chapter ${number ? "case-chapter--step" : ""} ${isIntro ? "case-chapter--intro" : ""} ${isResults ? "case-chapter--results" : ""} ${isSummary ? "case-chapter--summary" : ""} ${isValidation ? "case-chapter--validation" : ""} ${isDetail || isValidation ? "case-chapter--continuation" : ""}`} key={index} id={isResultsDetails ? "results-details" : `section-${index}`}>
         <header className="case-chapter-heading" data-reveal>
           {caption && <span className={`chapter-index eyebrow${isResultDetail ? " chapter-index--goal" : ""}`}>{caption}</span>}
-          {renderNode({ ...group.heading, text: isDetail ? capitalizeFirst(title.replace(/^Частный кейс:\s*/i, "")) : title.replace(/^\d+\.\s*/, "") }, `heading-${index}`)}
+          {renderNode({ ...group.heading, text: isSummary ? "Результаты" : isDetail ? capitalizeFirst(title.replace(/^Частный кейс:\s*/i, "")) : title.replace(/^\d+\.\s*/, "") }, `heading-${index}`)}
         </header>
         {renderBody(group.body, index)}
       </section>;
@@ -680,14 +678,18 @@ export function CaseTldrRenderer({source,content}:{source:string;content:import(
    <div className="tldr-context"><h2>Контекст и задача</h2><p>{typograph(content.context)}</p></div>
    <div className="tldr-contribution"><h2>Мой вклад</h2><p>{typograph(content.contribution)}</p></div>
   </section>
-  {content.results.length > 0 && <section className="tldr-results" aria-label="Результат">
-   {content.results.map((r,i)=><div className="tldr-result" key={i}><p className={`tldr-result-value${/^[\d≈]/.test(r.value)?"":" tldr-result-value--text"}`}>{typograph(r.value)}</p><h2>{typograph(r.label)}</h2><p className="tldr-result-note">{typograph(r.note)}</p></div>)}
-  </section>}
-  {groups.filter(g=>content.sections[g.title]).map((group,i)=><section className="case-chapter tldr-section" key={group.title}>
-   <header className="case-chapter-heading"><h2 className="notion-heading">{typograph(group.title.replace(/^\d+\.\s*/,'').replace(/^Частный кейс:\s*/,'').replace(/^./,c=>c.toUpperCase()))}</h2></header>
+  <NotionRenderer source={source} section="summary" />
+  {groups.filter(g=>content.sections[g.title]).map((group,i)=>{
+   const number=group.title.match(/^(\d+)\.\s*/)?.[1];
+   const isDetail=/^Частный кейс:/i.test(group.title);
+   return <section className={`case-chapter tldr-section${number?' case-chapter--step':''}`} key={group.title}>
+   <header className="case-chapter-heading">
+    {number ? <span className="chapter-index eyebrow">Решение / {number.padStart(2,'0')}</span> : isDetail ? <span className="chapter-index eyebrow">Частный кейс</span> : null}
+    <h2 className="notion-heading">{typograph(group.title.replace(/^\d+\.\s*/,'').replace(/^Частный кейс:\s*/,'').replace(/^./,c=>c.toUpperCase()))}</h2>
+   </header>
    <p className="tldr-section-copy">{typograph(content.sections[group.title])}</p>
    {group.body.filter(n=>n.type==='image'||n.type==='embed').map((n,j)=>renderNode(n,`tldr-media-${i}-${j}`))}
-  </section>)}
-  <section className="tldr-conclusion"><h2>Результат</h2><p>{typograph(content.conclusion)}</p></section>
+  </section>;})}
+  <NotionRenderer source={source} section="results" />
  </div>;
 }

@@ -2,6 +2,7 @@
 .visual-case{--type-page:500 clamp(2.25rem,4.5vw,4.5rem)/1.06 var(--type-family);}
 .visual-case .case-project-nav{display:flex;justify-content:space-between;padding-top:20px;}
 .visual-project-label{font-size:.875rem;color:var(--muted);}
+.case-subtitle--single-line{white-space:nowrap;}
 .visual-case .project-hero{display:block;padding-top:26px;padding-bottom:0;border:0;}
 .visual-case .case-intro{display:flex;align-items:flex-end;justify-content:space-between;gap:40px;margin-bottom:30px;}
 .visual-case .case-intro h1{margin:0;max-width:65%;}

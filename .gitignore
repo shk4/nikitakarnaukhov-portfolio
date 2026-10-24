@@ -42,7 +42,8 @@ next-env.d.ts
 /work/
 
 # Reassembled lossless source media (see media-source/manifest.json)
-/public/media/settings-islands-equal-gaps-2k.mp4
-/public/media/settings-product-entry.webp
+/public/media/personalization-web.mp4
+/public/media/settings-product-web.mp4
+/public/media/settings-validation.webp
 
-/public/media/settings-islands-studio-2k.mp4
+*.tsbuildinfo

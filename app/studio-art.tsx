@@ -1,3 +1,4 @@
+import { MediaSvgImage } from "./media-image";
 import type { ReactNode } from "react";
 import vectors from "./atlas-vectors.json";
 import { mediaDimensions } from "./media-dimensions";
@@ -10,7 +11,7 @@ export function ArtCrop({file,from,to,radius=12}:{file:string;from:number[];to:n
  const id=`crop-${file.replace(/\W/g,'')}-${from.join('-')}-${to.join('-')}`;
  return <svg x={x} y={y} width={w} height={h} viewBox={`${sx} ${sy} ${sw} ${sh}`} preserveAspectRatio="xMidYMid meet">
   <defs><clipPath id={id}><rect x={sx} y={sy} width={sw} height={sh} rx={radius*sw/w}/></clipPath></defs>
-  <image href={base+file} width="1800" height={sourceHeight} clipPath={`url(#${id})`}/>
+  <MediaSvgImage placeholder={{ x: sx, y: sy, width: sw, height: sh }} href={base+file} width="1800" height={sourceHeight} clipPath={`url(#${id})`}/>
  </svg>;
 }
 export function ArtBoard({title,kicker,subtitle,footer="СИСТЕМА / КОМПОНЕНТЫ / ПАТТЕРНЫ",compactHeight,hideTitle=false,children}:{title:string;kicker?:string;subtitle?:string;footer?:string|null;compactHeight?:number;hideTitle?:boolean;children:ReactNode}){
@@ -32,16 +33,31 @@ export function ArtBoard({title,kicker,subtitle,footer="СИСТЕМА / КОМ�
 function Label({x,y,children,accent=false}:{x:number;y:number;children:ReactNode;accent?:boolean}){return <text x={x} y={y} fontSize="16" className="art-mono" fill={accent?'#d9ff62':'#a2a5a0'}>{children}</text>}
 function Statement({x,y,children}:{x:number;y:number;children:ReactNode}){return <text x={x} y={y} fontSize="28" fill="#f0f0e9">{children}</text>}
 
+function SelectionProductCard({x, selected=false}:{x:number;selected?:boolean}) {
+ return <g transform={`translate(${x} 352)`} fontFamily="Arial, sans-serif">
+  <rect width="340" height="547" rx="12" fill="#eff1ef"/>
+  <text x="20" y="35" fontSize="16" fill={selected?'#009b83':'#73818c'}>{selected?'Выбрана только кнопка':'Выбрана вся карточка'}</text>
+  <rect x="20" y="58" width="300" height="378" rx={selected?2:5} fill="#fff" stroke={selected?'none':'#8c9aa5'} strokeWidth="2"/>
+  <MediaSvgImage href="/media/ceramic-vase-photo.webp" x="36" y="74" width="268" height="179" preserveAspectRatio="xMidYMid slice"/>
+  <text x="36" y="286" fontSize="21" fontWeight="700" fill="#252c38">Керамическая ваза</text>
+  <text x="36" y="319" fontSize="16" fill="#7c8793">Тёплый акцент для дома</text>
+  <text x="36" y="355" fontSize="21" fontWeight="700" fill="#252c38">2 490 ₽</text>
+  <rect x="36" y="374" width="268" height="46" rx="3" fill="#252c38"/>
+  <text x="170" y="404" textAnchor="middle" fontSize="18" fontWeight="700" fill="#fff">Купить</text>
+  {selected&&<g><rect x="34" y="372" width="272" height="50" rx="5" fill="none" stroke="#009b83" strokeWidth="3"/><path d="M278 397V428L286 420L293 434L298 431L291 417L304 416Z" fill="#252c38" stroke="#fff" strokeWidth="2.5" strokeLinejoin="round"/></g>}
+  <text x="20" y="515" fontSize="16" fill={selected?'#009b83':'#73818c'}>{selected?'Точное выделение элемента':'Кнопка отдельно недоступна'}</text>
+ </g>;
+}
 function DirectAccess(){return <ArtBoard title="Настройки – в один клик" footer={null} compactHeight={820}>
  <Label x={84} y={267}>ДО / ПОИСК В ОБЩЕЙ ПАНЕЛИ</Label><Label x={965} y={267} accent>ПОСЛЕ / КЛИК ПО ЭЛЕМЕНТУ</Label>
  <Statement x={84} y={309}>Блок / Карточка</Statement><Statement x={965} y={309}>Блок / Карточка / Кнопка</Statement>
- <ArtCrop file="settings-direct-access.webp" from={[84,393,309,547]} to={[84,352,309,547]}/>
- <ArtCrop file="settings-direct-access.webp" from={[418,393,418,580]} to={[418,352,418,580]}/>
- <ArtCrop file="settings-direct-access.webp" from={[965,393,309,547]} to={[965,352,309,547]}/>
- <ArtCrop file="settings-direct-access.webp" from={[1298,393,418,447]} to={[1298,352,418,447]}/>
+ <SelectionProductCard x={84}/>
+ <ArtCrop file="settings-direct-access.webp" from={[418,393,418,580]} to={[449,352,418,580]}/>
+ <SelectionProductCard x={965} selected/>
+ <ArtCrop file="settings-direct-access.webp" from={[1298,393,418,447]} to={[1330,352,418,447]}/>
  <path d="M900 254V1000" stroke="#525751"/>
- <path d="M393 444H413m-7-7 7 7-7 7" stroke="#a2a5a0" fill="none" strokeWidth="2"/>
- <path d="M1274 749H1284Q1290 749 1290 743V680H1297" stroke="#d9ff62" fill="none" strokeWidth="2"/>
+ <path d="M405 435H443m-7-7 7 7-7 7" stroke="#a2a5a0" fill="none" strokeWidth="2"/>
+ <path d="M1273 749H1310Q1320 749 1320 739V680H1329" stroke="#d9ff62" fill="none" strokeWidth="2"/>
  <Label x={84} y={995}>КАРТОЧКА → ПРОКРУТКА → НАСТРОЙКИ</Label><Label x={965} y={995} accent>КНОПКА → ЕЁ НАСТРОЙКИ</Label>
  </ArtBoard>}
 function Folders(){return <ArtBoard title="Гибкая структура папок" footer={null} compactHeight={810}>
@@ -112,8 +128,8 @@ function CampaignComparison(){return <ArtBoard kicker="BEFORE / AFTER" title="С
 function UploadComparison(){return <ArtBoard kicker="BEFORE / AFTER" title="После запуска выяснилось: для части клиентов загрузка по ссылке – основной способ." footer={null} compactHeight={780}>
  <Label x={84} y={268}>ДО / ДОПОЛНИТЕЛЬНЫЙ ШАГ</Label><Label x={964} y={268} accent>ПОСЛЕ / ПРЯМОЙ ДОСТУП</Label>
  <Statement x={84} y={314}>Ссылка спрятана за вкладкой</Statement><Statement x={964} y={314}>Файл и URL – в одном островке</Statement>
- <svg x="84" y="362" width="752" height="290" viewBox="1800 0 1400 540"><defs><clipPath id="upload-before"><rect x="1800" y="0" width="1400" height="540" rx="22"/></clipPath></defs><image href="/media/1b9e0e5b-dd49-4779-b9d4-f416014df1f1.png" width="3200" height="1798" clipPath="url(#upload-before)"/></svg>
- <svg x="964" y="362" width="752" height="354" viewBox="1800 0 1400 659"><defs><clipPath id="upload-after"><rect x="1800" y="0" width="1400" height="659" rx="22"/></clipPath></defs><image href="/media/78028cf0-bbab-4545-b11f-9e6a60750e46.png" width="3200" height="1798" clipPath="url(#upload-after)"/></svg>
+ <svg x="84" y="362" width="752" height="290" viewBox="1800 0 1400 540"><defs><clipPath id="upload-before"><rect x="1800" y="0" width="1400" height="540" rx="22"/></clipPath></defs><MediaSvgImage placeholder={{ x: 1800, y: 0, width: 1400, height: 540 }} href="/media/1b9e0e5b-dd49-4779-b9d4-f416014df1f1.png" width="3200" height="1798" clipPath="url(#upload-before)"/></svg>
+ <svg x="964" y="362" width="752" height="354" viewBox="1800 0 1400 659"><defs><clipPath id="upload-after"><rect x="1800" y="0" width="1400" height="659" rx="22"/></clipPath></defs><MediaSvgImage placeholder={{ x: 1800, y: 0, width: 1400, height: 659 }} href="/media/78028cf0-bbab-4545-b11f-9e6a60750e46.png" width="3200" height="1798" clipPath="url(#upload-after)"/></svg>
  <rect x="459" y="438" width="356" height="40" rx="9" fill="none" stroke="#87938c" strokeWidth="1.25" strokeDasharray="3 5" strokeLinecap="round"/>
  <g transform="translate(684 456)"><path d="M0 0V29.5L7.2 22.5L13 35L18.4 32.4L12.5 20.2L23 19.8Z" fill="#161818" stroke="#ffffff" strokeWidth="1.6" strokeLinejoin="round"/></g>
  <path d="M824 458H836Q852 458 852 474V670Q852 686 836 686H600" stroke="#87938c" strokeWidth="1.15" strokeDasharray="3 6" strokeLinecap="round" strokeLinejoin="round" fill="none"/>

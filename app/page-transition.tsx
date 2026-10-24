@@ -7,21 +7,15 @@ import { resetPageScroll } from "./scroll-position";
 // Fast routes never show the overlay; slower ones reveal as soon as committed.
 const SHOW_LOADER_AFTER_MS = 140;
 const EXIT_DURATION_MS = 100;
-const FIRST_CASE_TRANSITION_MS = 550;
 
 const titles: Record<string,string> = {
   "/": "Избранные проекты",
-  "/fixed": "Избранные проекты",
   "/cases/email-builder-settings": "Конструктор рассылок",
   "/cases/email-personalization": "Персонализация",
   "/cases/image-gallery": "Галерея изображений",
   "/cases/campaigns-redesign": "Кампании",
   "/cases/design-system": "Дизайн-система",
 };
-for(const variant of ['01','02','03','04','05','06','07','08','09','10','11']){
- titles[`/studies/${variant}`]='Избранные проекты';
- for(const path of Object.keys(titles).filter(p=>p.startsWith('/cases/')))titles[`/studies/${variant}${path}`]=titles[path];
-}
 
 export function PageTransition() {
   const router = useRouter();
@@ -33,14 +27,11 @@ export function PageTransition() {
   const fallback = useRef<ReturnType<typeof setTimeout> | null>(null);
   const departure = useRef<Animation | null>(null);
   const prefetched = useRef(new Set<string>());
-  const visitedCases = useRef(new Set<string>());
-  const revealNotBefore = useRef(0);
   const revealTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const reduced = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   useEffect(() => {
     if (!pending.current || pathname !== new URL(pending.current, location.href).pathname) return;
-    if (pathname.includes("/cases/")) visitedCases.current.add(pathname);
     const openAtTop = !new URL(pending.current, location.href).hash;
     pending.current = null;
     if (revealTimer.current) clearTimeout(revealTimer.current);
@@ -67,9 +58,7 @@ export function PageTransition() {
       main?.animate([{opacity:.95},{opacity:1}],{duration:150,easing:"cubic-bezier(.22,1,.36,1)",fill:"backwards"});
       reveal.finished.then(() => {panel.style.visibility="hidden"; panel.style.pointerEvents="none"; reveal.cancel();}).catch(()=>{});
     };
-    const remaining = Math.max(0, revealNotBefore.current - performance.now());
-    if (remaining) revealTimer.current = setTimeout(revealPage, remaining);
-    else revealPage();
+    revealPage();
     return () => {cancelAnimationFrame(scrollFrame);if(revealTimer.current)clearTimeout(revealTimer.current);};
   }, [pathname]);
 
@@ -96,8 +85,6 @@ export function PageTransition() {
       event.preventDefault();
       if (pending.current) return;
       pending.current = url.href;
-      const firstCaseVisit = url.pathname.includes("/cases/") && !visitedCases.current.has(url.pathname);
-      revealNotBefore.current = firstCaseVisit ? performance.now() + FIRST_CASE_TRANSITION_MS - EXIT_DURATION_MS : 0;
       if (revealTimer.current) clearTimeout(revealTimer.current);
       revealTimer.current = null;
       const panel=loader.current!;
@@ -114,8 +101,7 @@ export function PageTransition() {
       panel.animate([{opacity:0},{opacity:1}],{duration:130,easing:"ease-out",fill:"forwards"});
       departure.current=document.querySelector("main")?.animate([{opacity:1},{opacity:.15}],{duration:160,easing:"ease-out",fill:"forwards"}) || null;
       };
-      if (firstCaseVisit) showLoader();
-      else revealTimer.current = setTimeout(showLoader, SHOW_LOADER_AFTER_MS);
+      revealTimer.current = setTimeout(showLoader, SHOW_LOADER_AFTER_MS);
       fallback.current=setTimeout(()=>location.assign(url.href),6000);
       // Fetch and navigation start on the click, without waiting for the animation.
       router.push(url.pathname+url.search+url.hash, { scroll: Boolean(url.hash) });
@@ -130,29 +116,5 @@ export function PageTransition() {
   }, [router]);
 
 
-  useEffect(() => {
-    const connection = (navigator as Navigator & {connection?: {saveData?: boolean; effectiveType?: string}}).connection;
-    if (connection?.saveData || /(^|-)2g$/.test(connection?.effectiveType || '') || !('IntersectionObserver' in window)) return;
-    const observer = new IntersectionObserver(entries => {
-      for (const entry of entries) {
-        if (!entry.isIntersecting) continue;
-        const link = entry.target as HTMLAnchorElement;
-        observer.unobserve(link);
-        const url = new URL(link.href, location.href);
-        const href = url.pathname + url.search;
-        if (prefetched.current.has(href)) continue;
-        prefetched.current.add(href);
-        router.prefetch(href);
-      }
-    }, {rootMargin:'120px'});
-    const timer = setTimeout(() => {
-      document.querySelectorAll<HTMLAnchorElement>('a[href]').forEach(link => {
-        const url = new URL(link.href, location.href);
-        if (url.origin === location.origin && url.pathname in titles && url.pathname !== pathname && !link.hasAttribute('download')) observer.observe(link);
-      });
-    }, 300);
-    return () => {clearTimeout(timer);observer.disconnect();};
-  }, [pathname, router]);
-
-  return <div ref={loader} className={`retro-loader${(!pathname.startsWith('/studies/') || /^\/studies\/(07|10|11)(?:\/|$)/.test(pathname)) ? ' type-system' : ''}`} aria-hidden="true"><div className="retro-loader__screen"><div ref={caption} className="retro-loader__caption">Портфолио / Выбранный проект</div><div className="retro-loader__title"><span ref={title}/></div><div className="retro-loader__bar"><div className="retro-loader__bar-fill"/></div><div className="retro-loader__status"><span className="retro-loader__loading">Открываю проект<span className="retro-loader__caret">_</span></span><span className="retro-loader__ready">Готово</span><span>↵</span></div></div></div>;
+  return <div ref={loader} className="retro-loader type-system" aria-hidden="true"><div className="retro-loader__screen"><div ref={caption} className="retro-loader__caption">Портфолио / Выбранный проект</div><div className="retro-loader__title"><span ref={title}/></div><div className="retro-loader__bar"><div className="retro-loader__bar-fill"/></div><div className="retro-loader__status"><span className="retro-loader__loading">Открываю проект<span className="retro-loader__caret">_</span></span><span className="retro-loader__ready">Готово</span><span>↵</span></div></div></div>;
 }

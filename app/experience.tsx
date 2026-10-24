@@ -1,3 +1,4 @@
+import { MediaImage } from "./media-image";
 import { typography } from "./typography-tree";
 import { typograph } from "./typography";
 import type { ReactNode } from "react";
@@ -15,7 +16,7 @@ function ExperienceCard({
   return (
     <article className="experience-card">
       <div className="experience-card__mark" aria-hidden="true">
-        <img alt="" src={iconSrc} />
+        <MediaImage alt="" src={iconSrc} width={48} height={48} />
       </div>
       <div>
         <h3>{typograph(title)}</h3>

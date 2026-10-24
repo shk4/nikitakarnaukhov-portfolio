@@ -1,8 +1,8 @@
 "use client";
+import { MediaImage } from "./media-image";
 
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
-import { WorkbenchViewportPixels } from "./mix-accents";
 
 /** Kept outside animated route containers so Safari can composite it independently. */
 export function SiteNav() {
@@ -40,10 +40,9 @@ export function SiteNav() {
   }, []);
   const path = usePathname();
   const casePage = path.includes('/cases/');
-  const study = path.match(/^\/studies\/(0[1-9]|10|11)(?:\/|$)/)?.[1];
-  const home = study ? `/studies/${study}` : '/';
-  return <><header ref={header} className={`site-nav${(!study || study === '07' || study === '10' || study === '11') ? ' type-system' : ''}`}>
-    <a className="brand" href={home} data-transition-title="Никита Карнаухов" data-transition-caption="Портфолио" aria-label="Никита Карнаухов – главная"><img src="/media/nikita-logo.svg" alt="Никита Карнаухов" width="124" height="52" /></a>
+  const home = '/';
+  return <><header ref={header} className="site-nav type-system">
+    <a className="brand" href={home} data-transition-title="Никита Карнаухов" data-transition-caption="Портфолио" aria-label="Никита Карнаухов – главная"><MediaImage src="/media/nikita-logo.svg" alt="Никита Карнаухов" width="124" height="52" /></a>
     <nav aria-label="Основная навигация">
       <a href={casePage ? `${home}#work` : "#work"}>Проекты <sup>05</sup></a>
       <a href={casePage ? `${home}#about` : "#about"}>Обо мне</a>
@@ -57,5 +56,5 @@ export function SiteNav() {
         </div>
       </div>
     </nav>
-  </header>{(study==='07'||study==='10'||study==='11'||path==='/')&&<WorkbenchViewportPixels/>}</>;
+  </header></>;
 }

@@ -1,4 +1,5 @@
 "use client";
+import { MediaImage } from "./media-image";
 
 import { useState } from "react";
 
@@ -18,7 +19,7 @@ export function FigmaDisclosure({
     >
       <summary className="figma-disclosure__summary">
         <span className="figma-disclosure__label">
-          <img
+          <MediaImage
             alt=""
             aria-hidden="true"
             height="22"

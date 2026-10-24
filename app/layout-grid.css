@@ -1,6 +1,6 @@
 /* Shared twelve-column grid: every section uses the same canvas and gutter. */
 :root{--grid-gap:24px;--grid-columns:repeat(12,minmax(0,1fr));--gutter:clamp(22px,4.5vw,72px);}
-@media(min-width:1584px){:root{--gutter:calc((100vw - 1440px)/2);}}
+@media(min-width:1584px){:root{--gutter:calc((100vw - var(--content-max,1440px))/2);}}
 .notion-page--case,.remaining-projects{width:100%;max-width:none;margin-inline:0;padding-inline:var(--gutter);}
 .project-hero,.studio-hero,.studio-work,.studio-about,.site-nav,.site-footer{padding-inline:var(--gutter);}
 .case-abstract,.case-meta-columns,.case-chapter,.studio-about-grid,.studio-project--1{display:grid;grid-template-columns:var(--grid-columns);column-gap:var(--grid-gap);}
@@ -198,6 +198,3 @@
 
 /* Use the final image frame as its placeholder, without changing lazy loading. */
 .media-clip{position:relative;}
-html[data-media-loading-enabled] :is(.media-clip,.studio-project-media,.case-hero-image,.remaining-cover):has(img,image):not([data-media-state="ready"]):not([data-media-state="error"])::before{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;border-radius:inherit;background:linear-gradient(100deg,#282d2b 25%,#3d4540 45%,#282d2b 65%);background-size:240% 100%;animation:media-skeleton 1.6s ease-in-out infinite;}
-@keyframes media-skeleton{from{background-position:100% 0;}to{background-position:-100% 0;}}
-@media(prefers-reduced-motion:reduce){html[data-media-loading-enabled] :is(.media-clip,.studio-project-media,.case-hero-image,.remaining-cover)::before{animation:none;}}

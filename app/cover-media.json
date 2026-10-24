@@ -1,0 +1,56 @@
+{
+  "email-builder-settings-screen": {
+    "src": "/media/covers/email-builder-settings-screen-1440.webp",
+    "width": 3475,
+    "height": 1632,
+    "srcSet": "/media/covers/email-builder-settings-screen-480.webp 480w, /media/covers/email-builder-settings-screen-960.webp 960w, /media/covers/email-builder-settings-screen-1440.webp 1440w"
+  },
+  "email-builder-settings-detail": {
+    "src": "/media/covers/email-builder-settings-detail-1440.webp",
+    "width": 1560,
+    "height": 1896,
+    "srcSet": "/media/covers/email-builder-settings-detail-480.webp 480w, /media/covers/email-builder-settings-detail-960.webp 960w, /media/covers/email-builder-settings-detail-1440.webp 1440w"
+  },
+  "email-personalization-screen": {
+    "src": "/media/covers/email-personalization-screen-1440.webp",
+    "width": 3272,
+    "height": 1809,
+    "srcSet": "/media/covers/email-personalization-screen-480.webp 480w, /media/covers/email-personalization-screen-960.webp 960w, /media/covers/email-personalization-screen-1440.webp 1440w"
+  },
+  "email-personalization-detail": {
+    "src": "/media/covers/email-personalization-detail-1261.webp",
+    "width": 1261,
+    "height": 768,
+    "srcSet": "/media/covers/email-personalization-detail-480.webp 480w, /media/covers/email-personalization-detail-960.webp 960w, /media/covers/email-personalization-detail-1261.webp 1261w"
+  },
+  "image-gallery-screen": {
+    "src": "/media/covers/image-gallery-screen-1440.webp",
+    "width": 3554,
+    "height": 2091,
+    "srcSet": "/media/covers/image-gallery-screen-480.webp 480w, /media/covers/image-gallery-screen-960.webp 960w, /media/covers/image-gallery-screen-1440.webp 1440w"
+  },
+  "campaigns-redesign-screen": {
+    "src": "/media/covers/campaigns-redesign-screen-1440.webp",
+    "width": 3200,
+    "height": 1800,
+    "srcSet": "/media/covers/campaigns-redesign-screen-480.webp 480w, /media/covers/campaigns-redesign-screen-960.webp 960w, /media/covers/campaigns-redesign-screen-1440.webp 1440w"
+  },
+  "campaigns-redesign-detail": {
+    "src": "/media/covers/campaigns-redesign-detail-735.webp",
+    "width": 735,
+    "height": 1920,
+    "srcSet": "/media/covers/campaigns-redesign-detail-480.webp 480w, /media/covers/campaigns-redesign-detail-735.webp 735w"
+  },
+  "design-system-screen": {
+    "src": "/media/covers/design-system-screen-1440.webp",
+    "width": 3626,
+    "height": 1920,
+    "srcSet": "/media/covers/design-system-screen-480.webp 480w, /media/covers/design-system-screen-960.webp 960w, /media/covers/design-system-screen-1440.webp 1440w"
+  },
+  "design-system-detail": {
+    "src": "/media/covers/design-system-detail-956.webp",
+    "width": 956,
+    "height": 956,
+    "srcSet": "/media/covers/design-system-detail-480.webp 480w, /media/covers/design-system-detail-956.webp 956w"
+  }
+}

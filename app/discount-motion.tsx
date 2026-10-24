@@ -1,4 +1,5 @@
 "use client";
+import { MediaSvgImage } from "./media-image";
 
 import { useEffect, useRef, useState } from "react";
 import specs from "./discount-specs.json";
@@ -22,18 +23,24 @@ export function DiscountMotion(){
  },[]);
  useEffect(()=>{
   let visible=false,frame=0,last=0,rendered=0;
-  const observer=new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;last=0;},{threshold:.05});
-  if(root.current)observer.observe(root.current);
   const tick=(now:number)=>{
+   frame=0;
    if(visible&&!paused&&!document.hidden){
     if(last)clock.current=(clock.current+Math.min((now-last)/1000,.1))%11.6;
     if(now-rendered>32){setTime(clock.current);rendered=now;}
     last=now;
    }else last=0;
-   frame=requestAnimationFrame(tick);
+   if(visible&&!paused&&!document.hidden)frame=requestAnimationFrame(tick);
   };
-  frame=requestAnimationFrame(tick);
-  return()=>{observer.disconnect();cancelAnimationFrame(frame);};
+  const sync=()=>{
+   last=0;
+   if(visible&&!paused&&!document.hidden){if(!frame)frame=requestAnimationFrame(tick);}
+   else{cancelAnimationFrame(frame);frame=0;}
+  };
+  const observer=new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;sync();},{threshold:.05});
+  if(root.current)observer.observe(root.current);
+  document.addEventListener('visibilitychange',sync);
+  return()=>{observer.disconnect();cancelAnimationFrame(frame);document.removeEventListener('visibilitychange',sync);};
  },[paused]);
  const phase=time<3.2?0:time<6.35?1:2;
  const organized=ease((time-3.2)/.85),leaving=ease((time-6)/.4),enter=ease((time-6.35)/.55),selected=ease((time-5.45)/.25);
@@ -81,7 +88,7 @@ export function DiscountMotion(){
     <text x="112" y="826" fontSize="19" fill="#a2a5a0">Формат · округление · пример результата</text>
     <path d="M744 513H879V561H1083" fill="none" stroke="#d9ff62" strokeWidth="1.6" pathLength="1" strokeDasharray="1" strokeDashoffset={1-ease((time-6.53)/.46)}/>
     <rect x="1096" y="222" width="662" height="684" rx="20" fill="#343b30"/>
-    <image href={`/media/discount-system/dialog-${panel}.png`} x="1100" y="226" width="654" height="676" preserveAspectRatio="none"/>
+    <MediaSvgImage href={`/media/discount-system/dialog-${panel}.png`} x="1100" y="226" width="654" height="676" preserveAspectRatio="none"/>
    </g>
    <path d="M112 950H1808" stroke="#383b37"/>
   </svg>

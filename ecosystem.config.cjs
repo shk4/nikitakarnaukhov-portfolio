@@ -2,8 +2,8 @@ module.exports = {
   apps: [
     {
       name: 'nikitakarnaukhov',
-      script: 'npm',
-      args: 'run start -- -p 5177',
+      script: 'node_modules/vinext/dist/cli.js',
+      args: 'start -p 5177',
       cwd: './',
       instances: 1,
       autorestart: true,

@@ -53,13 +53,13 @@
 .portfolio-intro__tenure strong { display: block; margin-bottom: 4px; font-size: 30px; line-height: 1.15; letter-spacing: -.035em; }
 .portfolio-intro__tenure > span { color: var(--muted); }
 .portfolio-intro__career { margin-top: 28px; }
-.portfolio-intro__career-label { margin: 0 0 8px; font: var(--type-small); color: var(--muted); }
-.portfolio-intro__company { display: flex; align-items: baseline; justify-content: space-between; gap: 14px; margin: 0 0 17px; font: var(--type-action); }
+.portfolio-intro__career-label { margin: 0 0 8px; font: var(--type-small); font-size: .75rem; color: var(--muted); }
+.portfolio-intro__company { display: flex; align-items: baseline; justify-content: space-between; gap: 14px; margin: 0 0 17px; font: var(--type-action); color: var(--ink); }
 .portfolio-intro__company > span:last-child { color: var(--muted); font: var(--type-small); }
 .portfolio-intro__roles { margin: 0; display: grid; gap: 12px; }
 .portfolio-intro__roles > div { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; }
-.portfolio-intro__roles dt { font: var(--type-small); color: var(--muted); }
-.portfolio-intro__roles dd { margin: 0; font: var(--type-action); white-space: nowrap; }
+.portfolio-intro__roles dt { font: var(--type-small); color: var(--ink); }
+.portfolio-intro__roles dd { margin: 0; font: var(--type-small); color: var(--muted); white-space: nowrap; }
 .portfolio-intro__perspective { margin: 23px 0 0; font: var(--type-compact); text-wrap: pretty; }
 .portfolio-intro__location { margin: 20px 0 0; font: var(--type-small); color: var(--muted); }
 .portfolio-intro__history { margin-top: 40px; border: 1px solid #303232; border-radius: 10px; background: #181919; }
